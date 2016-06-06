@@ -76,7 +76,7 @@ From within the corset directory run the `bowtie2-build` command to index the tr
 	bowtie2-build transcriptome.fasta transcriptome
 ```
 
-## Step Seven - Align Reads
+## Align Reads
 
 Now make a file called `bowtie.sh` containing the following script.  Note that `bowtie2` options used in this script were derived from [this post](https://groups.google.com/forum/#!topic/corset-project/8Je6dPQ-BFk) on the corset users forum.
 
@@ -98,5 +98,15 @@ for f in *R1*.fastq.gz; do
 done
 
 ```
+
+
+## Run Corset
+
+For this step you will need to have [corset](https://github.com/Oshlack/Corset) installed. Corset can use sample grouping information to aid clustering. This example assumes this information isn't available and that there is just one bam file per sample.  In that case just run corset like this;
+
+```bash
+	corset *.bam
+```
+
 
 
