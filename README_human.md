@@ -2,7 +2,8 @@
 
 Instructions to take raw transcriptomics reads and progress to a counts file that can be used in `R` packages for statistical analysis of differential expression.
 
-To follow this tutorial you will need to have some basic familiarity with working in a unix-like environment.  An excellent place to start would be to attend a [software carpentry](http://software-carpentry.org/) or [data carpentry](http://www.datacarpentry.org/) workshop.  The VLSCI also have several tutorials for [working with unix and/or a HPC environment](http://vlsci.github.io/lscc_docs/tutorials/)
+To follow this tutorial you will need to have some basic familiarity with working in a unix-like environment.  An excellent place to start would be to attend a [software carpentry](http://software-carpentry.org/) or [data carpentry](http://www.datacarpentry.org/) workshop, or complete the [Unix bootcamp](
+http://rik.smith-unna.com/command_line_bootcamp/?id=9xnbkx6eaof).  The VLSCI also have several tutorials for [working with unix and/or a HPC environment](http://vlsci.github.io/lscc_docs/tutorials/)
 
 ## Connect to analysis server
 This will usually mean opening a terminal and using `ssh` to connect. The general format of this command is;
@@ -18,7 +19,7 @@ Often the sequencing center will provide a url to download raw sequencing data d
 	wget -O SequencingData.tar https://data.sequencingcenter.edu.au/download?key
 ```
 
-Once you have downloaded the data it is a good idea to keep the original unmodified files somewhere safe. 
+Once you have downloaded the data it is a good idea to keep the original unmodified files somewhere safe.
 
 ## Unpack the files
 
@@ -28,7 +29,7 @@ How to do this depends on how the files were packaged up. The general tool to us
 	tar -xvf Project_ANDI1971.tar
 ```
 
-Alternatively for gzipped files (`.gz` extension) you can use the `-z` option to unzip and untar at the same time. 
+Alternatively for gzipped files (`.gz` extension) you can use the `-z` option to unzip and untar at the same time.
 
 ```bash
 	tar -zxvf Project_ANDI1971.tar.gz
@@ -42,7 +43,7 @@ Now organise your raw read files. For the purposes of this tutorial we will assu
 
 ## Possibly Clean Reads
 
-Check the quality of your sequence data with fastqc.  If your reads contain adapter sequences you may need to trim those before going forward.  If you have a large fraction of unmapped reads and your read qualities are poor you may wish to consider trimming. 
+Check the quality of your sequence data with fastqc.  If your reads contain adapter sequences you may need to trim those before going forward.  If you have a large fraction of unmapped reads and your read qualities are poor you may wish to consider trimming.
 
 ## Obtain a reference transcriptome
 
@@ -83,7 +84,7 @@ Now make a file called `bowtie.sh` containing the following script.  Note that `
 This script requires both bowtie2 and samtools to be installed and available. You might need to do `module load samtools`.  The reason we need samtools is to avoid creating a large intermediate file in sam format. Instead we pipe outputs from bowtie2 directly to samtools which converts to the more compacts `bam`.
 
 ```bash
-for f in *R1*.fastq.gz; do 
+for f in *R1*.fastq.gz; do
 	r1=$f
 	r2=${f/R1/R2}
 	r12name=${f/R1/both}
@@ -107,6 +108,3 @@ For this step you will need to have [corset](https://github.com/Oshlack/Corset) 
 ```bash
 	corset *.bam
 ```
-
-
-
