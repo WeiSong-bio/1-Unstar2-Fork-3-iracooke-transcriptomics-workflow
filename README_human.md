@@ -12,7 +12,7 @@ This will usually mean opening a terminal and using `ssh` to connect. The genera
 	ssh username@my.hpc.server.edu.au
 ```
 ## Adding Files into a HPC terminal
-To begin, drag the required files into a new terminal. A new terminal should appear on the screen.
+To begin, navigate to the directory containing the files you want to upload to the server. A new terminal should appear on the screen.
 The next step is to transfer the files from the new terminal into the HPC terminal. This step is completed using the 'secure copy' or `scp` command and is as follows:
 
 ```bash
