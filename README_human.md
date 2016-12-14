@@ -18,7 +18,7 @@ This step will be important when using the HISAT program to align the RNAseq rea
 	```bash
 		wget http://website.come/files
 	```
-To download the *human genome*, enter the following command into the terminal on HPC
+To download a version of the *human genome* with HiSat2 indexes, enter the following command into the terminal on HPC
 
 	```bash
 		wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/data/grch38.tar.gz
