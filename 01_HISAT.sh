@@ -1,20 +1,16 @@
 #!/bin/bash
 #PBS -c s
 #PBS -j oe
-#PBS -m ae
-#PBS -N test
+#PBS -m abe
+#PBS -N hisat2
 #PBS -M lauren.taylor2@my.jcu.edu.au
 #PBS -l walltime=1000:00:00
-#PBS -l nodes=1:ppn=8
-#PBS -l pmem=3gb
+#PBS -l nodes=1:ppn=24
+#PBS -l pmem=12gb
 
-ncpu=`wc -l $PBS_NODEFILE`
-echo "------------------------------------------------------"
-echo " This job is allocated "$ncpu" CPU cores on "
-cat $PBS_NODEFILE | uniq
-echo "------------------------------------------------------"
-echo "PBS: Submitted to $PBS_QUEUE@$PBS_O_HOST"
-echo "PBS: Working directory is $PBS_O_WORKDIR"
-echo "PBS: Job identifier is $PBS_JOBID"
-echo "PBS: Job name is $PBS_JOBNAME"
-echo "------------------------------------------------------"
+module load hisat2
+module load samtools
+for f in *.fastq.gz; do
+  hisat2 -p 24 -x ../grch38/genome -1 $f -S ${f%.fastq.gz}.sam;
+  samtools sort -@ 24 -o ${f%.fastq.gz}.bam ${f%.fastq.gz}.sam;
+done
