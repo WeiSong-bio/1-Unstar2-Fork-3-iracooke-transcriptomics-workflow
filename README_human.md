@@ -48,7 +48,7 @@ This step uses the loop to take the original files and create a link with them i
 This command says that for all the files listed in the step above, link them to the current directory.  
 This creates a link between one directory \(i.e. the directory that contains the original files\) and your current directory \(indicated by the period.\) which allows you to access all the files in the original directory in your current directory, without changing anything about the original files.
 
-This process is much more efficient than using the `cp` command to copy all the files into a new directory. 
+This process is much more efficient than using the `cp` command to copy all the files into a new directory.
 
 ## Downloading the Human Genome
 This step will be important when using the HISAT program to align the RNAseq reads onto the genome. This step will use the `wget` command, which allows the user to download particular files from the web. The general format of this command is:
@@ -71,7 +71,7 @@ To unpack the version given above, enter the command as follows:
 ```
 
 ## Load the HISAT2 Program
-This is done using the HISAT2 program, which can be loaded onto the cluster using the command:
+This is done using the module command which can be used to load programs for use on the cluster. To load the HISAT2 program use the following command:
 
 ```bash
 	module load hisat2
