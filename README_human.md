@@ -62,12 +62,26 @@ To download a version of the *human genome* with HiSat2 indexes, enter the follo
 	wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/data/grch38.tar.gz
 ```
 
+You also need to download a gene annotation file for transcript assembly. Using the same command above, download the following website file: ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.gtf.gz
+
 ### Unpacking the Genome File
-The human genome file given above is a compressed file and therefore needs to be unpacked.  *This step will be different if you have downloaded a different version of the human genome*.
-To unpack the version given above, enter the command as follows:
+The human genome file and the annotation file given above are both compressed files and therefore need to be unpacked.  *This step will be different if you have downloaded a different version of the human genome*.
+To unpack the version of the human genome given above, enter the command as follows:
 
 ```bash
 	tar -zxvf grch38.tar.gz
+```
+To unpack the annotated file enter the command as follows:
+
+```bash
+	gunzip Homo_sapiens.GRCh38.87.gtf.gz
+```
+
+### Building the Genome Index for HISAT2
+Before continuing, the genome file downloaded above has to be built into an index which can be utilized by the HISAT2 program. In the folder \'grch38\', there is a file \'make_grch38.sh\', which is a built-in shell script that is used to build the genome index. Ensuring you're in the \'grch38\' directory, enter the command as follows:
+
+```bash
+ 	./make_grch38
 ```
 
 ## Load the HISAT2 Program
