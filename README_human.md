@@ -102,8 +102,9 @@ This should return a path showing the location to the hisat2 program.
 Using this same process load the \'samtools\' program.
 
 ## Creating and Running the HISAT2 Script
-When working with a large amount of files, it is not wise to submit them to the cluster in just one large job, as it may take up too many nodes and be terminated. One solution to this problem is to run the script through a loop, one file at a time. Before submitting the command loop, you must first create a script to run the data through the hisat and samtools program.
-An example of a HISAT2 script can be seen in the file labelled \'01_HISAT.sh\'.
+When working with a large amount of files, it is not wise to submit them to the cluster in just one large job, as jobs with large resource requirements may take a long time to run.  A better way to make optimal use of cluster resources is to submit many smaller jobs. This requires that many separate job scripts are created. To do this we use a loop over all input files, modifying a template job script each time to insert the filename.
+
+An example template HISAT2 script can be seen in the file labelled `01_HISAT.sh`.
 Generally, any of the lines beginning with a \'#\' are comments and therefore ignored. However, when writing PBS scripts, there are exceptions. The script begins with \'#!/bin/bash\' or a \'shebang\', which simply indicates that the script is a bash script. The following lines that begin with \'#PBS\' are PBS directives and give the script information about how the job should be run. The script itself begins on line 18. This line tells the job to make \'DUMMY\' the variable for all files, as it may then be substituted for the name of a file, specified in the command line. The next command, on line 21, tells the job to navigate into a specific directory. By using an absolute directory, this step ensures that the relative pathways featured in the next command are correct and that the output files will be placed into the correct directory.
 
 #### HISAT2 Command - Explained
