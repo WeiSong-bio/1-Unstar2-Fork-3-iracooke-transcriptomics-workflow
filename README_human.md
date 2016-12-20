@@ -78,10 +78,10 @@ To unpack the annotated file enter the command as follows:
 ```
 
 ### Building the Genome Index for HISAT2
-Before continuing, the genome file downloaded above has to be built into an index which can be utilized by the HISAT2 program. In the folder \'grch38\', there is a file \'make_grch38.sh\', which is a shell script that needs to be run in order to build the genome index for HISAT2. To run, this script must be submitted as a job to the cluster. To do this, enter the command as follows:
+Before continuing, the genome file downloaded above has to be built into an index which can be utilized by the HISAT2 program. In the folder \'grch38\', there is a file \'make_grch38.sh\', which is a built-in shell script that is used to build the genome index. Ensuring you're in the \'grch38\' directory, enter the command as follows:
 
 ```bash
-	qsub make_grch38
+ 	./make_grch38
 ```
 
 ## Load the HISAT2 Program
