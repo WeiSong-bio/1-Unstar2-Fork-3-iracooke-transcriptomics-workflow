@@ -102,13 +102,12 @@ This should return a path showing the location to the hisat2 program.
 Using this same process load the `samtools` program.
 
 ## Creating and Running the HISAT2 Script
-<<<<<<< HEAD
 When working with a large amount of files, it is not wise to submit them to the cluster in just one large job, as jobs with large resource requirements may take a long time to run. A better way to make optimal use of the cluster resources is to submit many smaller jobs. This requires that many separate job scripts are created. To do this we use a loop over all input files, modifying a template job script each time to insert the filename.
 
 An example of a HISAT2 script can be seen in the file labelled \'01_HISAT.sh\'.
 
 Generally, any of the lines beginning with a \'#\' are comments and therefore ignored. However, when writing PBS scripts, there are exceptions. The script begins with \'#!/bin/bash\' or a \'shebang\', which simply indicates that the script is a bash script. The following lines that begin with \'#PBS\' are PBS directives and give the script information about how the job should be run. The script itself begins on line 18. This line tells the job to make \'DUMMY\' the variable for all files, as it may then be substituted for the name of a file, specified in the command line. The next command, on line 21, tells the job to navigate into a specific directory. By using an absolute directory, this step ensures that the relative pathways featured in the next command are correct and that the output files will be placed into the correct directory.
-=======
+
 When working with a large amount of files, it is not wise to submit them to the cluster in just one large job, as jobs with large resource requirements may take a long time to run.  A better way to make optimal use of cluster resources is to submit many smaller jobs. This requires that many separate job scripts are created. To do this we use a loop over all input files, modifying a template job script each time to insert the filename.
 
 An example template HISAT2 script can be seen in the file labelled `01_HISAT.sh`.
@@ -129,10 +128,9 @@ For the above script to run through all the files efficiently, it needs to be pu
 	for f in *fastq.gz; do sed s/DUMMY/$f/ 01_HISAT.sh | qsub -; done
 ```
 
-<<<<<<< HEAD
+#### The Command Loop - Explained
 The important commands in the above loop are `for f in _`, `do`, and `done`. A simplified way of stating this command is: *for* all of the files specified, *do* a particular command and, *done* - ends the loop. The particular command above states that for all the files ending in \'fastq.gz\', do the `sed` command on the 01_HISAT.sh file and pipe the output to qsub. `sed` is a text editor that edits text in a non-interactive way, without altering the original text. The most common `sed` command is the substitution command or `s`. An example of this command is as follows: `sed s/old/new/ s_script.sh`, which searches the script called s_script.sh and replaces the text \'old\' with the text \'new\'. In the loop above, the sed command searches the 01_HISAT.sh text and substitutes the word \'DUMMY\' for a different file. The command line then pipes this command to qsub to submit the job to the cluster. The pipe command is very useful as it passes the output from one command (i.e. the sed command) to another (i.e. qsub). The loop ends with the command `done`, which indicates that the loop is finished. The loop then repeats, substituting a different file for DUMMY each time, until all the files have been submitted as jobs. Each jobs should then produce an output file \(\*.o\*\) into your directory.
 *The status of these jobs can be viewed by entering `qstat -u username` into the command line.
-=======
+
 The important commands in the above loop are `for f in _`, `do`, and `done`. A simplified way of stating this command is: *for* all of the files specified, *do* a particular command and, *done* - ends the loop. The particular command above states that for all the files ending in `fastq.gz`, do the `sed` command on the 01_HISAT.sh file and pipe the output to qsub. `sed` is a text editor that edits text in a non-interactive way, without altering the original text. The most common `sed` command is the substitution command or `s`. An example of this command is as follows: `sed s/old/new/ s_script.sh`, which searches the script called s_script.sh and replaces the text \'old\' with the text \'new\'. In the loop above, the sed command searches the 01_HISAT.sh text and substitutes the word \'DUMMY\' for the name of a file. The command line then pipes this command to qsub to submit the job to the cluster. The pipe command is very useful as it passes the output from one command (i.e. the sed command) to another (i.e. qsub). The loop ends with the command `done`, which indicates that the loop is finished. The loop then repeats, substituting a different file for DUMMY each time, until all the files have been submitted as jobs. Each jobs should then produce an output file \(\*.o\*\) into your directory.
-*The status of these jobs can be viewed by entering `qstat -u username` into the command line. 
->>>>>>> upstream/master
+*The status of these jobs can be viewed by entering `qstat -u username` into the command line*.
