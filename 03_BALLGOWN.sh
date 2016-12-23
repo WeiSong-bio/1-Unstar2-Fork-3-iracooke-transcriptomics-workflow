@@ -12,4 +12,4 @@ f=DUMMY
 
 cd /shares/32/jc320251/untouched_data
 
-/sw/stringtie/1.3.1c/stringtie $f -G ../Homo_sapiens.GRCh38.87.gtf -o ${f%.bam}stringtie.gtf -p 4 -v -l ${f%_R1.bam}
+/sw/stringtie/1.3.1c/stringtie -e -B -p 4 -G stringtie_merged.gtf -o ballgown/${f%_R1.bam} $f

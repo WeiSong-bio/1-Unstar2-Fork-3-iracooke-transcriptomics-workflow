@@ -6,7 +6,7 @@
 #Set the name of the job
 #PBS -N hisat2
 #Send any mail to this address
-#PBS -M lauren.taylor2@my.jcu.edu.au
+#PBS -M username@my.jcu.edu.au
 #Allocate required amount of wall time
 #PBS -l walltime=1000:00:00
 #Set the number of nodes and processors

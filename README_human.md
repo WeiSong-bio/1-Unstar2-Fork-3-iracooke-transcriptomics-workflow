@@ -125,4 +125,34 @@ For the above script to run through all the files efficiently, it needs to be pu
 The important commands in the above loop are `for f in _`, `do`, and `done`. A simplified way of stating this command is: *for* all of the files specified, *do* a particular command and, *done* - ends the loop. The particular command above states that for all the files ending in `fastq.gz`, do the `sed` command on the 01_HISAT.sh file and pipe the output to qsub. `sed` is a text editor that edits text in a non-interactive way, without altering the original text. The most common `sed` command is the substitution command or `s`. An example of this command is as follows: `sed s/old/new/ s_script.sh`, which searches the script called s_script.sh and replaces the text \'old\' with the text \'new\'. In the loop above, the sed command searches the 01_HISAT.sh text and substitutes the word \'DUMMY\' for the name of a file. The command line then pipes this command to qsub to submit the job to the cluster. The pipe command is very useful as it passes the output from one command (i.e. the sed command) to another (i.e. qsub). The loop ends with the command `done`, which indicates that the loop is finished. The loop then repeats, substituting a different file for DUMMY each time, until all the files have been submitted as jobs.
 *The status of these jobs can be viewed by entering `qstat -u username` into the command line*.
 
-After running this command, there should be 3 types of new files in your directory; .bam files, .sam files and hisat.o\* files. The hisat.o\* output files will show you the output from each alignment with each file and should give an overall alignment rate. The next step is to take the .bam files and run them through the stringtie program for transcript assembly. 
+After running this command, there should be 3 types of new files in your directory; .bam files, .sam files and hisat.o\* files. The hisat.o\* output files will show you the output from each alignment with each file and should give an overall alignment rate. The next step is to take the .bam files and run them through the stringtie program for transcript assembly.
+
+*This step took approximately 10 minutes for each data file*
+
+## Creating and Running the StringTie Command
+Writing and running the stringtie script is very similar to the hisat script above.
+
+An example of a stringtie script can be seen in the file labelled 02.STRINGTIE.sh.
+
+All of the #PBS directive should remain the same, the `f=DUMMY` should remain the same; and the path to the current directory should remain the same. The only thing that will change is the command line. To begin, the command gives the path to the stringtie program, and $f will be a variable for the files. The next command, `-G` is an option that allows you to specify the path to the annotated reference gene \(which we downloaded earlier\). The `-o` command allows you to specify an output file name for the assembled transcripts. In the example script, the output file provided is `${f%.bam}stringtie.gtf`, which tells the program to cut the \'.bam\' from the file and add \'stringtie.gtf\'. The command then lists the number of CPUs required for the command using `-p 4`. The next command `-v` tells the program to output all of the processing details into the output folder that it will produce, but is not necessary when running this script. Finally the `-l` command names a prefix for the output transcriptions. In the example given, we simply cut the \'\_R1.bam\' from the data file name. This step will be important when merging the transcripts in the next section. The script must then be loaded to the cluster using the `scp` command. The script may then be submitted to the job manager using the command below \(which is very similar to the hisat2 command loop\):
+
+```bash
+	for f in *.bam; do sed s/DUMMY/$f/ 02_STRINGTIE.sh | qsub -; done
+```
+
+*The status of these jobs can be viewed by entering `qstat -u username` into the command line*
+
+This command should then output two types of files into the directory: stringtie.o\* files and \*stringtie.gtf files.
+
+*This step took approximately 10 minutes for each data file*
+
+### Merging the StringTie Results
+This step allows you to merge all of the transcripts from all of the data files to an annotated reference gene \(if included\). Before entering this command, you must first create a .txt file that has all the names of the .gtf files, created in the previous step, with each file name on a **single line**. Download this file to your HPC directory using the `scp` command. **Make sure to run StringTie in the same directory as all the .gtf files.** Otherwise you will need to include the full path to the files in front of each gtf file name in the .txt file. The command is as follows:
+
+```bash
+	stringtie --merge -G ../Homo_sapiens.GRCh38.87.gtf -o stringtie_merged.gtf mergelist.txt
+```
+
+This command tells stringtie to merge the .gtf files to the annotated reference genome \(`-G`\) and output a merged file called \'stringtie_meregd.gtf\'.
+
+*This step took approximately 30 minutes for 400 data files*
