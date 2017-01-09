@@ -156,3 +156,18 @@ This step allows you to merge all of the transcripts from all of the data files 
 This command tells stringtie to merge the .gtf files to the annotated reference genome \(`-G`\) and output a merged file called \'stringtie_meregd.gtf\'.
 
 *This step took approximately 30 minutes for 400 data files*
+
+## Creating and Running the Ballgown Script
+The Ballgown script is very similar to the stringtie script. Details of the options for this script can be seen by loading stringtie and entering `stringtie` into the command line.
+
+An example of a script can be seen in the file 03_BALLGOWN.sh.
+
+The first section of the script provides the location of the stringtie program, as above. The `-e` command tells the program to only estimate the abundance of given reference transcripts and the `-B` command tells stringtie to enable output of ballgown table files which will be created in the same directory as the output GTF. The `-p` and `-G` are the same in the stringtie script above. The final command `-o` tells the program to output the data into a directory called \"ballgown\" and to cut the end of the file name \"\_R1.bam\". \(*in this step, the command is telling the program to create a directory called ballgown to deposit all the files. However, if you have already created a directory, you will instead need to provide a relative path to its location*\). After creating the script, it must be loaded to the cluster using the `scp` command. Once the script is loaded, enter the following command to run the script:
+
+```bash
+for f in *.bam; do sed s/DUMMY/$f/ 03_BALLGOWN.sh | qsub -; done
+```
+
+The output of this command may then be found in the directory labelled \"ballgown\". To view a section of this output, use the `head` command, which allows you to view just the top few lines of a file.
+
+*This step took approximately 10 mintues for each data file*
