@@ -54,7 +54,7 @@ This process is much more efficient than using the `cp` command to copy all the 
 This step will be important when using the HISAT program to align the RNAseq reads onto the genome. This step will use the `wget` command, which allows the user to download particular files from the web. The general format of this command is:
 
 ```bash
-	wget http://website.come/files
+	wget http://website.com/files
 ```
 To download a version of the *human genome* with HiSat2 indexes, enter the following command into the terminal on HPC
 
@@ -62,7 +62,7 @@ To download a version of the *human genome* with HiSat2 indexes, enter the follo
 	wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/data/grch38.tar.gz
 ```
 
-You also need to download a gene annotation file for transcript assembly. Using the same command above, download the following website file: ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.gtf.gz
+You also need to download a gene annotation file for transcript assembly. Using the same command above, download the following: ftp://ftp.ensembl.org/pub/release-87/gtf/homo_sapiens/Homo_sapiens.GRCh38.87.gtf.gz
 
 ### Unpacking the Genome File
 The human genome file and the annotation file given above are both compressed files and therefore need to be unpacked.  *This step will be different if you have downloaded a different version of the human genome*.
@@ -130,7 +130,7 @@ After running this command, there should be 3 types of new files in your directo
 *This step took approximately 10 minutes for each data file*
 
 ## Creating and Running the StringTie Command
-Writing and running the stringtie script is very similar to the hisat script above.
+Writing and running the stringtie script is very similar to the hisat script above. The stringtie program will assemble the transcripts to the annotated genome.
 
 An example of a stringtie script can be seen in the file labelled 02.STRINGTIE.sh.
 
@@ -157,17 +157,17 @@ This command tells stringtie to merge the .gtf files to the annotated reference 
 
 *This step took approximately 30 minutes for 400 data files*
 
-## Creating and Running the Ballgown Script
-The Ballgown script is very similar to the stringtie script. Details of the options for this script can be seen by loading stringtie and entering `stringtie` into the command line.
+## Creating and Running the Stringtie Script for Ballgown
+This script is very similar to the stringtie script and will estimate the transcript abundance and output the data into ballgown tables \(required for the next step\). Details of the options for this script can be seen by loading stringtie and entering `stringtie` into the command line.
 
 An example of a script can be seen in the file 03_BALLGOWN.sh.
 
-The first section of the script provides the location of the stringtie program, as above. The `-e` command tells the program to only estimate the abundance of given reference transcripts and the `-B` command tells stringtie to enable output of ballgown table files which will be created in the same directory as the output GTF. The `-p` and `-G` are the same in the stringtie script above. The final command `-o` tells the program to output the data into a directory called \"ballgown\" and to cut the end of the file name \"\_R1.bam\". \(*in this step, the command is telling the program to create a directory called ballgown to deposit all the files. However, if you have already created a directory, you will instead need to provide a relative path to its location*\). After creating the script, it must be loaded to the cluster using the `scp` command. Once the script is loaded, enter the following command to run the script:
+The first section of the script provides the location of the stringtie program, as above. The `-e` command tells the program to only estimate the abundance of given reference transcripts and the `-B` command tells stringtie to enable output of ballgown table files which will be created in the same directory as the output GTF. The `-p` and `-G` are the same in the stringtie script above. The final command `-o` tells the program to output the data into a \".gtf\" file instead of \"\_R1.bam\", within a subdirectory labelled after the data file name (i.e.\"${f%\_R1.bam}\"), within a directory called \"ballgown\". \(*in this step, the command is telling the program to create a subdirectory and a directory to deposit all the files. However, if you have already created a directory, you will instead need to provide a relative path to its location*\). After creating the script, it must be loaded to the cluster using the `scp` command and placed into the correct directory. Once the script is loaded, enter the following command to run the script:
 
 ```bash
 for f in *.bam; do sed s/DUMMY/$f/ 03_BALLGOWN.sh | qsub -; done
 ```
 
-The output of this command may then be found in the directory labelled \"ballgown\". To view a section of this output, use the `head` command, which allows you to view just the top few lines of a file.
+The output of this command may then be found in the directory labelled \"ballgown\". The output produced in each subdirectory should consist of one \'.gtf\' file and multiple \'.ctab\' files. The \'.gtf\' file contains all the information outputted by stringtie (i.e. the gene ID, the transcript ID, the reference gene name, the coverage, the TPM, etc.). The \'.ctab\' files contain only some of the information from the \'.gtf\' file. To view a small section of each of these outputs, use the `head *` command, which allows you to view just the top few lines of all the files.
 
-*This step took approximately 10 mintues for each data file*
+*This step took approximately 7 minutes for each data file*
